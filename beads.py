@@ -12,36 +12,38 @@ len_necklace, necklace = map(str,fin)
 #use that function in a for loop that will take every possible breaking point of the string
 #the function will return the forward and backward, and find how long the color lasts for
 #write output into a file
-max = 0
+len_necklace = int(len_necklace)
+beads_max = 0
 necklace = necklace.rstrip()
+def _IsColorCompatible(segment_color, current_bead):
+    return segment_color == 'w' or current_bead == 'w' or segment_color == current_bead
 for pos, letter in enumerate(necklace):
     forward_counter = 0
     backwardcounter = 0
-    starting_bead1 = necklace[pos]
+    segment_color = necklace[pos]
     newnecklace = list(necklace)
     # finding string going forward and compare current bead to starting bead
-    for index in range(len(newnecklace)):
-        current_bead = necklace[(pos + index) % len(newnecklace)]
-        if starting_bead1== 'w':
-            starting_bead1 = current_bead
-        if current_bead == starting_bead1 or current_bead == 'w':
+    for index in range(len_necklace):
+        current_bead = newnecklace[(pos + index) % len_necklace]
+        if _IsColorCompatible(segment_color, current_bead):
             forward_counter += 1
-            newnecklace[(pos + index) % len(newnecklace)] = 'x'
+            newnecklace[index] = 'x'
+            if current_bead != 'w':
+                segment_color = current_bead
         else:
             break
     starting_bead2 = newnecklace[pos-1]
     # find string going backward and compare to first bead
-    for reverse_index in range(len(newnecklace), 0, -1):
-        backwards_bead = newnecklace[(pos + reverse_index - 1) % len(newnecklace)]
-        if starting_bead2 == 'w':
-            starting_bead2 = backwards_bead
+    segment_color2 = necklace[pos-1]
+    for reverse_index in range(len_necklace, 0, -1):
+        backwards_bead = newnecklace[(pos + reverse_index - 1) % len_necklace]
         if backwards_bead == 'x':
             break
-        if backwards_bead == starting_bead2 or backwards_bead == 'w':
+        if _IsColorCompatible(segment_color, backwards_bead):
             backwardcounter += 1
         else:
             break
-    if (forward_counter+backwardcounter) > max:
-        max = forward_counter+backwardcounter
+    if (forward_counter+backwardcounter) > beads_max:
+        beads_max = forward_counter+backwardcounter
 
-fout.write(f"{max}\n")
+fout.write(f"{beads_max}\n")
