@@ -13,9 +13,7 @@ for line in range(lines_number):
 def IsOverlap(time1tuple, time2tuple):
     time1_start, time1_end = time1tuple
     time2_start, time2_end = time2tuple
-    if time1_start <= time2_start <= time1_end or time2_start <= time1_start <= time2_end:
-        return True
-    return False
+    return time1_start <= time2_start <= time1_end or time2_start <= time1_start <= time2_end
 time_list.sort()
 largest_overlap = 0
 largest_idle = 0
