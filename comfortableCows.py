@@ -2,13 +2,13 @@
 # if a cow was comfortable but not is not, it can't be comfortable again
 # make a matrix
 
-def makeMatrix(x):
-    matrix = []
-    for a in range(x+1):
-        matrix.append([])
-        for y in range(x+1):
-            matrix[a].append([])
-    return matrix
+# def makeMatrix(x):
+#     matrix = []
+#     for a in range(x+1):
+#         matrix.append([])
+#         for y in range(x+1):
+#             matrix[a].append([])
+#     return matrix
 
 def findAdjacentCells(x,y):
     if x == 0:
@@ -18,19 +18,18 @@ def findAdjacentCells(x,y):
     else:
         return [(x-1,y),(x+1,y),(x,y-1), (x,y+1)]
 
-def isCowComfortable(x,y,matrix):
+def isCowComfortable(x,y,dictionary):
     adjacent = findAdjacentCells(x,y)
     counter = 0
-
-    for (x,y) in adjacent:
-        if matrix[x][y] == [1]:
+    for coord in adjacent:
+        if coord in dictionary:
             counter += 1
     return counter == 3
 
-def displayMatrix(matrix):
-    print("\n\n\n")
-    for line in matrix:
-        print(line)
+# def displayMatrix(matrix):
+#     print("\n\n\n")
+#     for line in matrix:
+#         print(line)
 
 # matrix = makeMatrix(5)
 #
@@ -46,14 +45,14 @@ def displayMatrix(matrix):
 
 def solveTheProblem(coordlist, x):
     appended = {}
-    matrix = makeMatrix(x)
+    coordDict = {}
     for (x,y) in coordlist:
-        matrix[x][y] = [1]
+        coordDict[(x,y)] = 0
         appended[(x,y)] = 0
         comCows = 0
         for (x1,y1) in appended:
             if appended[(x1,y1)] != -1:
-                if isCowComfortable(x1,y1,matrix):
+                if isCowComfortable(x1,y1, coordDict):
                     appended[(x1,y1)] = 1
                     comCows += 1
                 else:
@@ -65,8 +64,12 @@ def solveTheProblem(coordlist, x):
 if __name__ == "__main__":
     a = int(input())
     coordlist = []
-    for a in range(a):
-        x,y = map(int, input().split())
-        coordlist.append((y,x))
+    for x in range(1000):
+        for y in range(1000):
+            coordlist.append((y,x))
+    print("done")
+    # for a in range(a):
+    #     x,y = map(int, input().split())
+    #     coordlist.append((y,x))
     solveTheProblem(coordlist, a)
 

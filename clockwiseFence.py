@@ -8,19 +8,23 @@ def determineLeftOrRight(facing, turn): # true if left, false if right
     if facing == "N":
         if turn == "W":
             return True
-        return False
+        if turn == "E":
+            return False
     if facing == "S":
         if turn == "W":
             return False
-        return True
+        if turn == "E":
+            return True
     if facing == "E":
         if turn == "N":
+            return False
+        if turn == "S":
             return True
-        return False
     if facing == "W":
         if turn == "N":
             return True
-        return False
+        if turn == "S":
+            return False
 
 def determineDirection(turnstring):
     currentDirection = turnstring[0]
