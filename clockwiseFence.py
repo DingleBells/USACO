@@ -1,78 +1,40 @@
-# more left turns = ccw
-# more right turns = cw
-import fileinput
-# count the number of left or right turns
-def determineLeftOrRight(facing, turn): # true if left, false if right
-    if facing == turn:
-        return None
-    if facing == "N":
-        if turn == "W":
-            return True
-        if turn == "E":
-            return False
-    if facing == "S":
-        if turn == "W":
-            return False
-        if turn == "E":
-            return True
-    if facing == "E":
-        if turn == "N":
-            return False
-        if turn == "S":
-            return True
-    if facing == "W":
-        if turn == "N":
-            return True
-        if turn == "S":
-            return False
+def angle_from_direction(a):
+    if a == "E":
+        return 0
+    if a  == "N":
+        return 90
+    if a == "W":
+        return 180
+    if a == "S":
+        return 270
 
-def determineDirection(turnstring):
-    currentDirection = turnstring[0]
-    leftCount = 0
-    for turn in turnstring[1:]:
-        direction = determineLeftOrRight(currentDirection, turn)
-        if direction != None:
-            if direction:
-                leftCount += 1
-            else:
-                leftCount -= 1
-        # print(currentDirection, turn, f"Turned left?:{direction}", leftCount)
-        currentDirection = turn
-    if leftCount <= 0:
-        print("CW")
+def angle_change(a, b):
+    thing1 = angle_from_direction(a)
+    thing2 = angle_from_direction(b)
+    if thing1 == thing2:
+        return 0
+    elif (thing2 == (thing1 + 90)%360):
+        return 90
+    elif (thing2 == (thing1 + 270)%360):
+        return -90
     else:
-        print("CCW")
+        return False
 
-def newDetermineDirection(start, end):
-    if start == "N":
-        if end == "E":
-            return "CW"
-        return "CCW"
-    elif start == "S":
-        if end == "E":
-            return "CCW"
-        return "CW"
-    elif start == "E":
-        if end == "N":
-            return "CW"
+def test(instring):
+    totalChange = 0
+    for index in range(len(instring)):
+        totalChange += angle_change(instring[index], instring[(index+1)%(len(instring))])
+    if totalChange == 360:
         return "CCW"
     else:
-        if end == "N":
-            return "CCW"
         return "CW"
-# def determineLast(instring):
-#     reverseString = instring[::-1]
-#     lastDirection = reverseString[0]
-#     for letter in reverseString:
-#         if lastDirection != letter:
-#             secondToLast = letter
-#             break
-#     print(newDetermineDirection(secondToLast, lastDirection))
 
+def solveTheProblem():
+    n = int(input())
+    stringlist = []
+    for x in range(n):
+        stringlist.append(input())
+    for string in stringlist:
+        print(test(string))
 
-if __name__ == "__main__":
-    inlines = []
-    for line in fileinput.input():
-        inlines.append(line)
-    for thing in inlines[1:]:
-        determineDirection(thing)
+solveTheProblem()
